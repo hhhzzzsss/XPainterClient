@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.hhhzzzsss.xpainterclient.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ChatInputSuggestorMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "GameRendererMixin",
+    "MinecraftClientMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
