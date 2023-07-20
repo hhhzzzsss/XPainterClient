@@ -13,7 +13,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PaintingHandler {
+    public static final long POKE_DELAY = 10*1000;
+
     public static double lastKnownInk = 0.0;
+    public static long nextPokeTime = System.currentTimeMillis();
 
     private static final Pattern INK_PATTERN = Pattern.compile(".*?([\\d\\.]+)/([\\d\\.]+) Ink.*");
 
@@ -23,7 +26,9 @@ public class PaintingHandler {
         if (Util.MC.world == null) return;
         if (XPainterClient.pos1 == null || XPainterClient.pos2 == null) return;
         if (XPainterClient.targetFillBlock == null) return;
-        if (lastKnownInk < 10.0) return;
+
+        long currTime = System.currentTimeMillis();
+        if (lastKnownInk < 10.0 && currTime < nextPokeTime) return;
 
         if (nextClickDelay > 0) {
             nextClickDelay--;
@@ -31,6 +36,8 @@ public class PaintingHandler {
         } else {
             nextClickDelay = 9;
         }
+
+        nextPokeTime = currTime + POKE_DELAY;
 
         int x1 = XPainterClient.pos1.getX();
         int y1 = XPainterClient.pos1.getY();
@@ -77,6 +84,7 @@ public class PaintingHandler {
         if (m.matches()) {
             try {
                 lastKnownInk = Double.parseDouble(m.group(1));
+                nextPokeTime = System.currentTimeMillis() + POKE_DELAY;
             } catch (Throwable e) {
                 e.printStackTrace();
             }
